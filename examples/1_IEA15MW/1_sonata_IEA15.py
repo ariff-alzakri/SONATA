@@ -54,7 +54,7 @@ flags_dict = {"flag_wt_ontology": flag_wt_ontology, "flag_ref_axes_wt": flag_ref
 
 # ===== User defined radial stations ===== #
 # Define the radial stations for cross sectional analysis (only used for flag_wt_ontology = True -> otherwise, sections from yaml file are used!)
-radial_stations =  [0., 0.01, 0.03, 0.05, 0.075, 0.15, 0.25, 0.3 , 0.4, 0.5 , 0.6 , 0.7 , 0.8 , 0.9 , 1.]
+radial_stations =  [0,0.5,1.0] # [0., 0.01, 0.03, 0.05, 0.075, 0.15, 0.25, 0.3 , 0.4, 0.5 , 0.6 , 0.7 , 0.8 , 0.9 , 1.]
 # radial_stations = [.7]
 # ===== Execute SONATA Blade Component Object ===== #
 # name          - job name of current task
@@ -71,7 +71,7 @@ job.blade_gen_section(topo_flag=True, mesh_flag = True)
 # ===== Recovery Analysis + BeamDyn Outputs ===== #
 
 # Define flags
-flag_3d = False
+flag_3d = False 
 flag_csv_export = False                         # export csv files with structural data
 # Update flags dictionary
 flags_dict['flag_csv_export'] = flag_csv_export
@@ -95,6 +95,10 @@ beam_struct_eval(flags_dict, Loads_dict, radial_stations, job, run_dir, job_str,
 # job.blade_plot_beam_props()
 
 # saves figures in folder_str/figures if savepath is provided:
-job.blade_plot_sections(attribute=attribute_str, plotTheta11=flag_plotTheta11, plotDisplacement=flag_plotDisplacement, savepath=run_dir)
+# job.blade_plot_sections(attribute=attribute_str, plotTheta11=flag_plotTheta11, plotDisplacement=flag_plotDisplacement, savepath=run_dir)
 if flag_3d:
     job.blade_post_3dtopo(flag_wf=flags_dict['flag_wf'], flag_lft=flags_dict['flag_lft'], flag_topo=flags_dict['flag_topo'])
+
+# Use the improved continuous method (recommended)
+print("Exporting STEP file using continuous method...")
+job.blade_export_step("my_blade.step", method="continuous")
